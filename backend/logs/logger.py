@@ -24,7 +24,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # ── Log File Setup ────────────────────────────────────────────────────────────
-LOG_DIR = Path(os.getenv("LOG_DIR", "/app/logs"))
+LOG_DIR = Path(os.getenv("LOG_DIR", "logs/queries"))
 LOG_DIR.mkdir(parents=True, exist_ok=True)
 LOG_FILE = LOG_DIR / "queries.jsonl"
 
