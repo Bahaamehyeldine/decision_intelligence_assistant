@@ -20,9 +20,9 @@ from ml.features import extract_features
 logger = logging.getLogger(__name__)
 
 # ── Model Loading ─────────────────────────────────────────────────────────────
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(
+BASE_DIR = os.path.dirname(os.path.dirname(
     os.path.abspath(__file__)
-)))
+))
 MODEL_PATH = os.path.join(BASE_DIR, "data", "processed", "priority_classifier.pkl")
 
 try:

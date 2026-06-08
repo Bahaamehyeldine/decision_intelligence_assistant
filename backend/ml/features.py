@@ -26,9 +26,9 @@ from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 logger = logging.getLogger(__name__)
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(
+BASE_DIR = os.path.dirname(os.path.dirname(
     os.path.abspath(__file__)
-)))
+))
 PROCESSED_DIR = os.path.join(BASE_DIR, "data", "processed")
 
 # ── Load Pre-fitted Transformers ──────────────────────────────────────────────

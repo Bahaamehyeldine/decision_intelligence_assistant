@@ -1,16 +1,53 @@
 import { useState, useEffect } from 'react'
 import { submitQuery, checkHealth } from './api/client'
 
+interface RAGResult {
+  answer: string
+  retrieval_latency_ms: number
+  llm_latency_ms: number
+  total_latency_ms: number
+  low_similarity: boolean
+  context_count: number
+}
+
+interface NonRAGResult {
+  answer: string
+  llm_latency_ms: number
+}
+
+interface MLResult {
+  priority: number
+  priority_label: string
+  confidence: number
+  urgent_probability: number
+  latency_ms: number
+}
+
+interface ZeroShotResult {
+  priority: number
+  priority_label: string
+  latency_ms: number
+}
+
+interface QueryResult {
+  query: string
+  rag: RAGResult | null
+  non_rag: NonRAGResult | null
+  ml_prediction: MLResult | null
+  llm_zeroshot: ZeroShotResult | null
+  error: string | null
+}
+
 function App() {
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
-  const [error, setError] = useState(null)
+  const [result, setResult] = useState<QueryResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [health, setHealth] = useState('checking...')
 
   useEffect(() => {
     checkHealth()
-      .then(h => setHealth(h.status))
+      .then((h: {status: string}) => setHealth(h.status))
       .catch(() => setHealth('unhealthy'))
   }, [])
 
@@ -21,9 +58,10 @@ function App() {
     setResult(null)
     try {
       const response = await submitQuery(query)
-      setResult(response)
-    } catch (err) {
-      setError(err.message || 'Something went wrong')
+      setResult(response as QueryResult)
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Something went wrong'
+      setError(message)
     } finally {
       setLoading(false)
     }
@@ -92,7 +130,7 @@ function App() {
                     <span className="text-sm text-gray-400">{result.ml_prediction?.latency_ms}ms</span>
                   </div>
                   <p className="text-sm text-gray-500 mt-1">
-                    Confidence: {((result.ml_prediction?.confidence || 0) * 100).toFixed(1)}%
+                    Confidence: {((result.ml_prediction?.confidence ?? 0) * 100).toFixed(1)}%
                   </p>
                 </div>
 
