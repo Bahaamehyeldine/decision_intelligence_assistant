@@ -116,6 +116,15 @@ Result: Normal 144,057 (85.4%) / Urgent 24,630 (14.6%)
 No overfitting: Train F1=0.9659 vs Test F1=0.9675 (gap=0.0016)
 Top features: sentiment (32.9%), problem_keywords_count (30.3%), has_financial_keyword (23.5%)
 
+### What this score does and does not measure
+
+The labels come from the weak-supervision rules above, and the model's strongest features (sentiment, problem keywords, financial keywords) are built from the same signals. So F1 = 0.97 measures **how faithfully the model reproduces the labeling function**, not how well it matches real human urgency judgments. Two consequences:
+
+- The classifier inherits the labeling function's blind spots. Sarcasm and informal complaints without trigger words are missed by the rules, so they are also missed by the model (see *Known Limitations*).
+- The score is an upper bound on usefulness, not an estimate of it. A model can only agree with rules it was trained on so well.
+
+**How to measure real accuracy:** hand-label a random sample of a few hundred tweets that the labeling function never saw, report precision and recall on that set, and compare against the labeling function itself as a baseline. Until that exists, treat 0.97 as a consistency check.
+
 ## Deployment Recommendation
 
 At 10,000 tickets/hour — deploy the ML Classifier.
@@ -124,10 +133,10 @@ At 10,000 tickets/hour — deploy the ML Classifier.
 |-----------|--------------|---------------|
 | Latency | ~2ms | ~1000ms |
 | Cost per ticket | $0 | ~$0.000001 |
-| Accuracy (F1) | 0.9675 | ~0.85 estimated |
+| Agreement with weak labels (F1) | 0.9675 | not measured |
 | Explainability | Full feature importance | Black box |
 
-ML classifier is 500x faster, costs nothing, higher measured accuracy.
+ML classifier is 500x faster and costs nothing. Its accuracy against human judgment has not been measured yet (see above), so the recommendation rests on latency, cost and explainability; a small hand-labeled set comparing both approaches would settle the quality question.
 Exception: Use LLM zero-shot for sarcasm/informal language edge cases.
 
 ## API Endpoints
