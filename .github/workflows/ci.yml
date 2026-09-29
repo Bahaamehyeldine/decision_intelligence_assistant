@@ -12,8 +12,8 @@ jobs:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.11"
           cache: pip
@@ -21,17 +21,17 @@ jobs:
       - name: Install dependencies (CPU-only PyTorch)
         run: |
           pip install torch==2.12.0 --index-url https://download.pytorch.org/whl/cpu
-          pip install -r requirements.txt pytest ruff
+          pip install -r requirements.txt pytest ruff==0.15.11
           python -c "import nltk; [nltk.download(p, quiet=True) for p in ('wordnet','averaged_perceptron_tagger','averaged_perceptron_tagger_eng')]"
       - name: Lint
-        run: ruff check --config ../ruff.toml .
+        run: ruff check --output-format=github --config ../ruff.toml .
       - name: Tests
         run: python -m pytest -v tests
 
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Build backend image
         run: docker build -t dia-backend backend
       - name: Build frontend image
