@@ -47,6 +47,11 @@ Windows PowerShell: $env:OLLAMA_HOST = "0.0.0.0" then ollama serve
 Linux/Mac: OLLAMA_HOST=0.0.0.0 ollama serve
 Pull model if needed: ollama pull llama3.2
 
+Before Step 3 - Generate the data and model (not committed, because of size):
+Download the Kaggle dataset linked under Dataset below, then run notebooks/eda.ipynb followed by
+notebooks/model_training.ipynb. They write data/processed/labeled_tweets.csv and
+data/processed/priority_classifier.pkl, which the backend loads at startup.
+
 Step 3 - Start all services:
 docker compose up --build
 

@@ -15,3 +15,6 @@ dist/
 build/
 *.csv
 data/
+
+# Local Qdrant data (rebuilt by the indexing step)
+qdrant_storage/
