@@ -1,0 +1,3 @@
+target-version = "py311"
+# Notebooks are exploratory; lint the service code.
+extend-exclude = ["notebooks", "frontend"]

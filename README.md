@@ -1,5 +1,9 @@
 # Decision Intelligence Assistant
 
+[![CI](https://github.com/Bahaamehyeldine/decision_intelligence_assistant/actions/workflows/ci.yml/badge.svg)](https://github.com/Bahaamehyeldine/decision_intelligence_assistant/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.11-blue)
+![License](https://img.shields.io/badge/license-MIT-green)
+
 A full-stack AI application that classifies customer support tickets and generates intelligent responses using RAG, ML, and LLM — with a four-way comparison to help you decide what to deploy in production.
 
 ## What It Does
@@ -49,8 +53,10 @@ Pull model if needed: ollama pull llama3.2
 
 Before Step 3 - Generate the data and model (not committed, because of size):
 Download the Kaggle dataset linked under Dataset below, then run notebooks/eda.ipynb followed by
-notebooks/model_training.ipynb. They write data/processed/labeled_tweets.csv and
-data/processed/priority_classifier.pkl, which the backend loads at startup.
+notebooks/model_training.ipynb (install notebooks/requirements.txt). They write
+data/processed/labeled_tweets.csv plus the model and its fitted transformers
+(priority_classifier.pkl, tfidf_vectorizer.pkl, svd_reducer.pkl, normalizer.pkl),
+which the backend loads at startup (docker compose mounts ./data into the container).
 
 Step 3 - Start all services:
 docker compose up --build
@@ -131,13 +137,23 @@ GET  /health    Check all service statuses
 GET  /logs      Recent query logs
 GET  /stats     Aggregate statistics
 
+## Testing
+
+```bash
+cd backend
+pip install -r requirements.txt pytest
+python -m pytest tests   # feature extraction + request validation, no model files needed
+```
+
+CI runs lint, these tests, and builds both Docker images on every push.
+
 ## Known Limitations
 
 - ML misses urgent tweets using sarcasm or informal language (5.5% miss rate)
 - LLM answers require Ollama running locally
 - Qdrant must be re-indexed after each fresh Docker deployment
-- RoBERTa feature has zero importance (redundant with VADER)
+- RoBERTa feature has zero importance (redundant with VADER); at inference VADER's negative score stands in for it
 
 ## Author
 
-Bahaamehyeldine — AI Engineering Bootcamp Project 3
+**Bahaa Mehye Eddin** · [GitHub](https://github.com/Bahaamehyeldine) · SE Factory AI Engineering Bootcamp, Project 3
