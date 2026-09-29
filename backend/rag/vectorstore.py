@@ -15,8 +15,7 @@ from typing import Optional
 import pandas as pd
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
-    Distance, VectorParams, PointStruct,
-    Filter, FieldCondition, MatchValue
+    Distance, VectorParams, PointStruct
 )
 from tenacity import retry, stop_after_attempt, wait_exponential
 

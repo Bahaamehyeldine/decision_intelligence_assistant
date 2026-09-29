@@ -8,10 +8,9 @@ Four endpoints: /query, /health, /logs, /stats
 from __future__ import annotations
 
 import logging
-from typing import Optional
 
 import ollama
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from llm.with_rag import answer_with_rag
 from llm.without_rag import answer_without_rag
@@ -19,7 +18,7 @@ from ml.predict import predict_priority
 from rag.vectorstore import health_check as qdrant_health
 from logs.logger import log_query, get_recent_logs, get_log_stats
 from schemas.input import QueryRequest
-from schemas.output import QueryResponse, HealthResponse
+from schemas.output import QueryResponse
 
 # ── Logging ───────────────────────────────────────────────────────────────────
 logger = logging.getLogger(__name__)

@@ -12,7 +12,6 @@ import os
 import time
 
 import joblib
-import numpy as np
 
 from ml.features import extract_features
 
